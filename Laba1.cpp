@@ -33,19 +33,30 @@ static void RenderSceneCB() {
 	static float Scale = 0.0f;
 	Scale += 0.001f;
 
-	glm::mat4 World;
+    glm::mat4 mov;
 
-   /*World[0][0] = cosf(Scale); World[0][1] = -sinf(Scale); World[0][2] = 0.0f; World[0][3] = 0.0f;
-    World[1][0] = sinf(Scale); World[1][1] = cosf(Scale); World[1][2] = 0.0f; World[1][3] = 0.0f;
-    World[2][0] = 0.0f; World[2][1] = 0.0f; World[2][2] = 1.0f; World[2][3] = 0.0f;
-    World[3][0] = 0.0f; World[3][1] = 0.0f; World[3][2] = 0.0f; World[3][3] = 1.0f;*/
+    mov[0][0] = 1.0f; mov[0][1] = 0.0f; mov[0][2] = 0.0f; mov[0][3] = sinf(Scale);
+    mov[1][0] = 0.0f; mov[1][1] = 1.0f; mov[1][2] = 0.0f; mov[1][3] = 0.0f;
+    mov[2][0] = 0.0f; mov[2][1] = 0.0f; mov[2][2] = 1.0f; mov[2][3] = 0.0f;
+    mov[3][0] = 0.0f; mov[3][1] = 0.0f; mov[3][2] = 0.0f; mov[3][3] = 1.0f;
 
-    World[0][0] = sinf(Scale); World[0][1] = 0.0f; World[0][2] = 0.0f; World[0][3] = 0.0f;
-    World[1][0] = 0.0f; World[1][1] = cosf(Scale); World[1][2] = 0.0f; World[1][3] = 0.0f;
-    World[2][0] = 0.0f; World[2][1] = 0.0f; World[2][2] = sinf(Scale); World[2][3] = 0.0f;
-    World[3][0] = 0.0f; World[3][1] = 0.0f; World[3][2] = 0.0f; World[3][3] = 1.0f;
+    glm::mat4 rotZ;
 
-	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World[0][0]);
+    rotZ[0][0] = cosf(Scale);  rotZ[0][1] = -sinf(Scale); rotZ[0][2] = 0.0f; rotZ[0][3] = 0.0f;
+    rotZ[1][0] = sinf(Scale);  rotZ[1][1] = cosf(Scale);  rotZ[1][2] = 0.0f; rotZ[1][3] = 0.0f;
+    rotZ[2][0] = 0.0f;         rotZ[2][1] = 0.0f;         rotZ[2][2] = 1.0f; rotZ[2][3] = 0.0f;
+    rotZ[3][0] = 0.0f;         rotZ[3][1] = 0.0f;         rotZ[3][2] = 0.0f; rotZ[3][3] = 1.0f;
+
+    glm::mat4 scale;
+
+    scale[0][0] = sinf(Scale); scale[0][1] = 0.0f;        scale[0][2] = 0.0f;        scale[0][3] = 0.0f;
+    scale[1][0] = 0.0f;        scale[1][1] = cosf(Scale); scale[1][2] = 0.0f;        scale[1][3] = 0.0f;
+    scale[2][0] = 0.0f;        scale[2][1] = 0.0f;        scale[2][2] = sinf(Scale); scale[2][3] = 0.0f;
+    scale[3][0] = 0.0f;        scale[3][1] = 0.0f;        scale[3][2] = 0.0f;        scale[3][3] = 1.0f;
+
+    mov = mov * rotZ * scale;
+
+	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &mov[0][0]);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
